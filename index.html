@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>My Website</title>
+    <meta property="og:title" content="My Website">
+    <meta property="og:site_name" content="My Website">
+    <meta property="og:description" content="Welcome to my website">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="photo">
+    <meta name="twitter:title" content="My Website">
+    <meta name="twitter:site" content="@example">
+    <meta name="twitter:description" content="Website">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style type="text/css">
+        /* Reset & Custom Properties */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --background: #0A0F1C;
+            --surface: #151C2C;
+            --surface-alpha: rgba(21, 28, 44, 0.8);
+            --primary: #7C3AED;
+            --primary-dark: #5B21B6;
+            --primary-light: #8B5CF6;
+            --primary-alpha: rgba(124, 58, 237, 0.1);
+            --secondary: #3B82F6;
+            --accent: #F472B6;
+            --text: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --success: #10B981;
+            --error: #EF4444;
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Animations */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes float-stars {
+            0% { transform: translateY(0px) translateX(0px); }
+            50% { transform: translateY(-10px) translateX(5px); }
+            100% { transform: translateY(0px) translateX(0px); }
+        }
+
+        @keyframes shooting-star {
+            0% { transform: translateX(0) translateY(0) rotate(45deg); opacity: 1; }
+            100% { transform: translateX(1000px) translateY(1000px) rotate(45deg); opacity: 0; }
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 0.5; filter: blur(40px); }
+            50% { opacity: 0.8; filter: blur(30px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) skewX(-15deg); }
+            100% { transform: translateX(100%) skewX(-15deg); }
+        }
+
+        /* Base Styles */
+        body {
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+
+        /* Background Effects */
+        .background-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            z-index: 0;
+            background: radial-gradient(ellipse at top, #0F172A 0%, #020617 100%);
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            perspective: 300px;
+            transform-style: preserve-3d;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--twinkle-duration, 4s) infinite ease-in-out,
+                       float-stars var(--float-duration, 6s) infinite ease-in-out;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, #fff, transparent);
+            animation: shooting-star 2s linear infinite;
+            opacity: 0;
+        }
+
+        .background-gradient {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 10%, 
+                    rgba(124, 58, 237, 0.15),
+                    transparent 40%),
+                radial-gradient(circle at 90% 90%, 
+                    rgba(59, 130, 246, 0.15),
+                    transparent 40%),
+                radial-gradient(circle at 50% 50%, 
+                    rgba(244, 114, 182, 0.1),
+                    transparent 60%);
+            filter: blur(80px);
+            opacity: 0.8;
+        }
+
+        .glow-orb {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            transition: all 3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: glow 8s infinite ease-in-out;
+        }
+
+        .glow-orb:nth-child(1) {
+            top: -150px;
+            left: -150px;
+            background: linear-gradient(135deg, var(--primary), #9333EA);
+            animation-delay: -4s;
+        }
+
+        .glow-orb:nth-child(2) {
+            bottom: -150px;
+            right: -150px;
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+            animation-delay: -2s;
+        }
+
+        /* Main Container */
+        .full-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 100;
+            background: rgba(10, 15, 28, 0.4);
+            backdrop-filter: blur(20px);
+        }
+
+        /* Content Box */
+        .content-box {
+            position: relative;
+            background: rgba(21, 28, 44, 0.7);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.6s ease-out;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .content-box:hover {
+            transform: translateY(-2px);
+        }
+
+        .content-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.05),
+                transparent
+            );
+            transform: skewX(-15deg);
+            animation: shimmer 8s infinite;
+        }
+
+        /* Typography */
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, 
+                var(--text) 0%,
+                rgba(255, 255, 255, 0.8) 50%,
+                var(--text) 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient 8s linear infinite;
+        }
+
+        .title span {
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Button Container */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        /* Language Button */
+        .btn-language {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .btn-language::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(124, 58, 237, 0.1),
+                rgba(59, 130, 246, 0.1)
+            );
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .btn-language:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+        }
+
+        .btn-language:hover::before {
+            opacity: 1;
+        }
+
+        .btn-language:active {
+            transform: translateY(1px);
+        }
+
+        .btn-language img {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            margin-right: 16px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .btn-language span {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text);
+            z-index: 1;
+        }
+
+        /* Cookie Consent Styles */
+        .cookie-content {
+            text-align: center;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .cookie-content p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .cookie-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 32px;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            color: var(--text);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-decline {
+            background: linear-gradient(135deg, var(--error), #DC2626);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-decline:hover {
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Video Container */
+        .scare {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: black;
+            z-index: 1000;
+            visibility: hidden;
+        }
+
+        video#video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            .content-box {
+                padding: 32px 24px;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+
+            .btn-language {
+                padding: 14px 20px;
+            }
+
+            .btn-language span {
+                font-size: 1rem;
+            }
+
+            .cookie-content p {
+                font-size: 1rem;
+            }
+
+            .cookie-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 14px 24px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .content-box {
+                padding: 24px 16px;
+            }
+
+            .title {
+                font-size: 1.75rem;
+            }
+
+            .btn-language img {
+                width: 20px;
+                height: 20px;
+                margin-right: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-wrapper">
+        <div class="stars"></div>
+        <div class="background-gradient"></div>
+        <div class="glow-orb"></div>
+        <div class="glow-orb"></div>
+    </div>
+
+    <!-- Language Selection -->
+    <div id="language-selection" class="full-screen">
+        <div class="content-box">
+            <h2 class="title">Select <span>Language</span></h2>
+            <div class="button-container">
+                <button class="btn-language" onclick="selectLanguage('en')">
+                    <img src="https://flagicons.lipis.dev/flags/4x3/us.svg" alt="EN">
+                    <span>English</span>
+                </button>
+                <button class="btn-language" onclick="selectLanguage('uk')">
+                    <img src="https://flagicons.lipis.dev/flags/4x3/ua.svg" alt="UA">
+                    <span>Ukrainian</span>
+                </button>
+                <button class="btn-language" onclick="selectLanguage('ru')">
+                    <img src="https://flagicons.lipis.dev/flags/4x3/ru.svg" alt="RU">
+                    <span>Russian</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Consent -->
+    <div id="cookie-consent" class="full-screen" style="display: none;">
+        <div class="content-box">
+            <div class="cookie-content">
+                <h2 class="title" id="cookie-title"></h2>
+                <p id="cookie-description"></p>
+                <div class="cookie-buttons">
+                    <button id="accept-cookies" class="btn">Accept</button>
+                    <button id="decline-cookies" class="btn btn-decline">Decline</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Container -->
+    <div class="scare">
+        <video id="video" src="media/video.mp4" loop></video>
+    </div>
+
+    <script type="text/javascript">
+        // Create stars
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const numStars = 200;
+
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random size between 1 and 3px
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Random position
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation durations
+                star.style.setProperty('--twinkle-duration', `${Math.random() * 3 + 2}s`);
+                star.style.setProperty('--float-duration', `${Math.random() * 4 + 4}s`);
+                
+                // Random animation delay
+                star.style.animationDelay = `${Math.random() * 4}s`;
+                
+                // Random depth (Z position)
+                const zPos = Math.random() * 200 - 100;
+                star.style.transform = `translateZ(${zPos}px)`;
+                
+                starsContainer.appendChild(star);
+            }
+
+            // Create shooting stars
+            setInterval(() => {
+                const shootingStar = document.createElement('div');
+                shootingStar.className = 'shooting-star';
+                
+                // Random position at the top
+                shootingStar.style.left = `${Math.random() * 100}%`;
+                shootingStar.style.top = `${Math.random() * 30}%`;
+                
+                starsContainer.appendChild(shootingStar);
+                
+                // Remove shooting star after animation
+                setTimeout(() => {
+                    shootingStar.remove();
+                }, 2000);
+            }, 4000);
+        }
+
+        // Language and cookie handling
+        let currentLanguage = 'en';
+        const languageMessages = {
+            en: {
+                title: "Cookies and Third-Party Content",
+                description: "This site uses cookies to collect error information to improve the site and fix bugs. Please accept cookies for better optimization."
+            },
+            uk: {
+                title: "Cookies та сторонній контент",
+                description: "Цей сайт використовує cookies для збору помилок з метою покращення сайту та виправлення помилок. Прийміть cookies для кращої оптимізації."
+            },
+            ru: {
+                title: "Cookies и сторонний контент",
+                description: "Этот сайт использует cookies для сбора ошибок с целью улучшения сайта и исправления ошибок. Примите cookies для лучшей оптимизации."
+            }
+        };
+
+        const video = document.getElementById("video");
+        const languageSelection = document.getElementById("language-selection");
+        const cookieConsent = document.getElementById("cookie-consent");
+        const acceptCookies = document.getElementById("accept-cookies");
+        const declineCookies = document.getElementById("decline-cookies");
+        const cookieTitle = document.getElementById("cookie-title");
+        const cookieDescription = document.getElementById("cookie-description");
+
+        function selectLanguage(language) {
+            currentLanguage = language;
+            languageSelection.style.display = "none";
+            cookieConsent.style.display = "flex";
+            cookieTitle.textContent = languageMessages[language].title;
+            cookieDescription.textContent = languageMessages[language].description;
+        }
+
+        function handleCookiesResponse(accept) {
+            cookieConsent.style.display = "none";
+            showVideo();
+        }
+
+        function showVideo() {
+            video.play();
+            document.querySelector('.scare').style.visibility = "visible";
+            videoClick();
+        }
+
+        acceptCookies.addEventListener("click", () => handleCookiesResponse(true));
+        declineCookies.addEventListener("click", () => handleCookiesResponse(false));
+
+        function videoClick(event) {
+            if(event) event.preventDefault();
+            const { documentElement } = document;
+            if(documentElement.requestFullscreen) documentElement.requestFullscreen();
+            else if(documentElement.mozRequestFullScreen) documentElement.mozRequestFullScreen();
+            else if(documentElement.webkitRequestFullscreen) documentElement.webkitRequestFullscreen();
+            else if(documentElement.msRequestFullscreen) documentElement.msRequestFullscreen();
+        }
+
+        // Initialize stars when page loads
+        document.addEventListener('DOMContentLoaded', createStars);
+    </script>
+</body>
+</html>
